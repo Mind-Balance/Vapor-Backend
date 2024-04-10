@@ -39,4 +39,4 @@
 <a name="licencia"></a>
 ## ©️ Licencia
 
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md]() para más detalles.
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](https://github.com/Mind-Balance/Vapor-Backend/blob/main/LICENSE.md) para más detalles.
