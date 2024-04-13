@@ -43,17 +43,17 @@ final class User: Model {
 // DTOs
 extension User {
     
-    struct Create: Content, Validatable {
-        let name: String
-        let email: String
-        let password: String
-        
-        static func validations(_ validations: inout Vapor.Validations) {
-            validations.add("name", as: String.self, is: !.empty, required: true)
-            validations.add("email", as: String.self, is: .email, required: true)
-            validations.add("password", as: String.self, is: .count(6...), required: true)
-        }
-    }
+//    struct Create: Content, Validatable {
+//        let name: String
+//        let email: String
+//        let password: String
+//
+//        static func validations(_ validations: inout Vapor.Validations) {
+//            validations.add("name", as: String.self, is: !.empty, required: true)
+//            validations.add("email", as: String.self, is: .email, required: true)
+//            validations.add("password", as: String.self, is: .count(6...), required: true)
+//        }
+//    }
     
     struct Public: Content {
         let id: UUID?
@@ -61,6 +61,52 @@ extension User {
         let email: String
     }
     
+    // MARK: - API DTO -
+    typealias Employees = [Employee]
+    
+    struct APICompany: Decodable {
+        let employees: Employees
+        
+        enum CodingKeys: String, CodingKey {
+            case results
+        }
+        
+        init(from decoder: Decoder) throws {
+            let results = try decoder.container(keyedBy: CodingKeys.self)
+            
+            self.employees = try results.decode(Employees.self, forKey: .results)
+        }
+    }
+    
+    struct Employee: Decodable {
+        let name: Name
+        let email: String
+        let login: Login
+        let identification: Identification
+        let image: Picture
+        
+        enum CodingKeys: String, CodingKey {
+            case name, email, login
+            case identification = "id"
+            case image = "picture"
+        }
+    }
+    
+    struct Name: Decodable {
+        let first, last: String
+    }
+    
+    struct Login: Decodable {
+        let username, password: String
+    }
+    
+    struct Identification: Decodable {
+        let name, value: String
+    }
+    
+    struct Picture: Decodable {
+        let large: String
+    }
 }
 
 extension User: ModelAuthenticatable {

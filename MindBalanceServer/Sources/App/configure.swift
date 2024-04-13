@@ -12,7 +12,7 @@ public func configure(_ app: Application) async throws {
     guard let _ = Environment.process.APP_BUNDLE_ID else { fatalError("APP_BUNDLE_ID not found") }
 
     // Public folder
-    app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
+//    app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
     
     // Configure DB
     try app.databases.use(.postgres(url: dbURL), as: .psql)
@@ -24,9 +24,9 @@ public func configure(_ app: Application) async throws {
     app.jwt.signers.use(.hs256(key: jwtKey))
 
     // Migrations
-//    app.migrations.add(ModelsMigration_v0())
-//    app.migrations.add(PopulateInitialData_v0())
-//    try await app.autoMigrate()
+    app.migrations.add(ModelsMigration_v0())
+    app.migrations.add(PopulateInitialData_v0())
+    try await app.autoMigrate()
 
     // Register routes
     try routes(app)

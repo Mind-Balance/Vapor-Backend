@@ -10,7 +10,11 @@ import Fluent
 
 struct PopulateInitialData_v0: AsyncMigration {
     func prepare(on database: Database) async throws {
-        
+        do {
+            try await APIClient().getEmployees()
+        } catch {
+            print(error)
+        }
     }
     
     func revert(on database: Database) async throws {
