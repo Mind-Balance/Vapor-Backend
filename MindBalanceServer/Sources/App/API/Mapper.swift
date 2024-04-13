@@ -19,7 +19,7 @@ final class Mapper {
             // Generate identification (step to be omitted in real case)
             let dni: String = generateDNI()
             
-            return User(name: $0.name.first, surname: $0.name.last, nickname: $0.login.username, email: $0.email, password: passwordHashed ?? "", dni: dni, company: companyExample, imageURL: $0.image.large, mood: 0, administrator: false)
+            return User(name: $0.name.first, surname: $0.name.last, nickname: $0.login.username, email: $0.email, password: passwordHashed ?? "", dni: dni, company: companyExample, imageURL: $0.image.large, mood: 0, administrator: false, passwordChanged: false)
         }
     }
 }

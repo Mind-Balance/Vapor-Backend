@@ -46,13 +46,16 @@ final class User: Model {
     @Field(key: "administrator")
     var administrator: Bool
     
+    @Field(key: "password_changed")
+    var passwordChanged: Bool
+    
     @Timestamp(key: "created_at", on: .create, format: .iso8601)
     var createdAt: Date?
     
     // Inits
     init() {}
     
-    init(id: UUID? = nil, name: String, surname: String, nickname: String, email: String, password: String, dni: String, company: String, imageURL: String? = nil, mood: Int, administrator: Bool, createdAt: Date? = nil) {
+    init(id: UUID? = nil, name: String, surname: String, nickname: String, email: String, password: String, dni: String, company: String, imageURL: String? = nil, mood: Int, administrator: Bool, passwordChanged: Bool, createdAt: Date? = nil) {
         self.id = id
         self.name = name
         self.surname = surname
@@ -64,6 +67,7 @@ final class User: Model {
         self.imageURL = imageURL
         self.mood = mood
         self.administrator = administrator
+        self.passwordChanged = passwordChanged
         self.createdAt = createdAt
     }
 }

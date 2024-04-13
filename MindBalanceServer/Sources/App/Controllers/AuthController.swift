@@ -45,14 +45,24 @@ extension AuthController {
     
     func signIn(req: Request) async throws -> JWTToken.Public {
         // Get authenticated user
-        let user = try req.auth.require(User.self)
+        let user: User = try req.auth.require(User.self)
         
-        // Generate tokens
-        let tokens = JWTToken.generateToken(userID: user.id!)
-        let accessSigned = try req.jwt.sign(tokens.accessToken)
-        let refreshSigned = try req.jwt.sign(tokens.refreshToken)
+        // TODO: Comprobar si el usuario tiene el campo de cambio de contraseña: bool
+        // if false:
+        //      se devuelven tokens vacíos. Al recibirlos vacíos en cliente, este le llevará a la pantalla
+        //      de cambio de contraseña. Se introducen las dos contraseñas y se hace llamada POST con email, pass antigua (guardados en Keychain) y la nueva contraseña
+        #warning("Ahora quedaría hacer llamada para cambiar contraseña")
         
-        return JWTToken.Public(accessToken: accessSigned, refreshToken: refreshSigned)
+        if user.passwordChanged {
+            // Generate tokens
+            let tokens = JWTToken.generateToken(userID: user.id!)
+            let accessSigned = try req.jwt.sign(tokens.accessToken)
+            let refreshSigned = try req.jwt.sign(tokens.refreshToken)
+            
+            return JWTToken.Public(accessToken: accessSigned, refreshToken: refreshSigned)
+        } else {
+            return JWTToken.Public(accessToken: "", refreshToken: "")
+        }
     }
     
     func refresh(req: Request) async throws -> JWTToken.Public {
