@@ -16,11 +16,14 @@ final class User: Model {
     @ID(key: .id)
     var id: UUID?
     
-    @Timestamp(key: "created_at", on: .create, format: .iso8601)
-    var createdAt: Date?
-    
     @Field(key: "name")
     var name: String
+    
+    @Field(key: "surname")
+    var surname: String
+    
+    @Field(key: "nickname")
+    var nickname: String
     
     @Field(key: "email")
     var email: String
@@ -28,16 +31,41 @@ final class User: Model {
     @Field(key: "password")
     var password: String
     
+    @Field(key: "dni")
+    var dni: String
+    
+    @Field(key: "company")
+    var company: String
+    
+    @OptionalField(key: "imageURL")
+    var imageURL: String?
+    
+    @Field(key: "mood")
+    var mood: Int
+    
+    @Field(key: "administrator")
+    var administrator: Bool
+    
+    @Timestamp(key: "created_at", on: .create, format: .iso8601)
+    var createdAt: Date?
+    
     // Inits
     init() {}
     
-    init(id: UUID? = nil, name: String, email: String, password: String) {
+    init(id: UUID? = nil, name: String, surname: String, nickname: String, email: String, password: String, dni: String, company: String, imageURL: String? = nil, mood: Int, administrator: Bool, createdAt: Date? = nil) {
         self.id = id
         self.name = name
+        self.surname = surname
+        self.nickname = nickname
         self.email = email
         self.password = password
+        self.dni = dni
+        self.company = company
+        self.imageURL = imageURL
+        self.mood = mood
+        self.administrator = administrator
+        self.createdAt = createdAt
     }
-    
 }
 
 // DTOs
@@ -59,53 +87,6 @@ extension User {
         let id: UUID?
         let name: String
         let email: String
-    }
-    
-    // MARK: - API DTO -
-    typealias Employees = [Employee]
-    
-    struct APICompany: Decodable {
-        let employees: Employees
-        
-        enum CodingKeys: String, CodingKey {
-            case results
-        }
-        
-        init(from decoder: Decoder) throws {
-            let results = try decoder.container(keyedBy: CodingKeys.self)
-            
-            self.employees = try results.decode(Employees.self, forKey: .results)
-        }
-    }
-    
-    struct Employee: Decodable {
-        let name: Name
-        let email: String
-        let login: Login
-        let identification: Identification
-        let image: Picture
-        
-        enum CodingKeys: String, CodingKey {
-            case name, email, login
-            case identification = "id"
-            case image = "picture"
-        }
-    }
-    
-    struct Name: Decodable {
-        let first, last: String
-    }
-    
-    struct Login: Decodable {
-        let username, password: String
-    }
-    
-    struct Identification: Decodable {
-        let name, value: String
-    }
-    
-    struct Picture: Decodable {
-        let large: String
     }
 }
 

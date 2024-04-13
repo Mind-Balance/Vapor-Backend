@@ -13,11 +13,19 @@ struct ModelsMigration_v0: AsyncMigration {
         try await database
             .schema(User.schema)
             .id()
-            .field("created_at", .string)
             .field("name", .string, .required)
+            .field("surname", .string, .required)
+            .field("nickname", .string, .required)
             .field("email", .string, .required)
             .field("password", .string, .required)
+            .field("dni", .string, .required)
+            .field("company", .string, .required)
+            .field("imageURL", .string)
+            .field("mood", .int16)
+            .field("administrator", .bool)
+            .field("created_at", .string)
             .unique(on: "email")
+            .unique(on: "dni")
             .create()
     }
     
