@@ -15,11 +15,84 @@
 ## Índice
  
 * [💧 Servidor en Vapor](#server)
+	* [Instalación](#instalacion)
+	* [Endpoints](#endpoints)
+		* [Sign In](#signIn)
 * [✍🏼 Autores/as](#autorxs)
 * [©️ Licencia](#licencia)
 
 <a name="server"></a>
 ## 💧 Servidor en Vapor
+
+<a name="instalacion"></a>
+### Instalación
+
+Para comenzar a utilizar la API Rest, sigue estos sencillos pasos:
+
+1. **Requisitos previos**
+
+	* Swift 5.9
+	* Vapor 4.92.4
+	* Vapor Toolbox 18.7.4
+
+2. **Clonar el Repositorio**
+
+	```bash
+	git clone <url-del-repositorio>
+	```
+
+	Asegurarse de tener instalado Git en el sistema antes de clonar el repositorio. 	Esto descargará el código fuente de la API en tu máquina local.
+	
+3. **Crear BBDD local**
+
+	Asegurarse de tener una base de datos PostgreSQL activa en tu máquina local.
+
+4. **Configuración de Variables de Entorno**
+
+	Crea un archivo `.env` en la raíz del proyecto y rellena la siguiente información:
+	
+	```bash
+	JWT_KEY=
+	API_KEY=
+	DATABASE_URL=postgresql://<usuario>@<host>/<nombre_de_la_base_de_datos>
+	APP_BUNDLE_ID=
+
+	```
+	Asegurarse de completar cada variable con los valores correspondientes necesarios para el funcionamiento de la aplicación. 
+	
+La URL de la base de datos debe seguir el formato `postgresql://<usuario>@<host>/<nombre_de_la_base_de_datos>`.
+
+5. **Configuración de Xcode**
+
+	* Abre el proyecto en Xcode.
+	* Edita el esquema (Scheme) del proyecto.
+	* Activa la opción de "Use custom working directory" y enlaza la carpeta donde 	se encuentra el proyecto recién clonado.
+
+6. **Ejecución del Proyecto**
+
+	* Ejecuta el proyecto en Xcode.
+	* Verifica en la terminal que el servidor se ha inicializado correctamente.
+
+<a name="endpoints"></a>
+### Endpoints
+
+<a name="signIn"></a>
+#### Sign In
+
+* **Descripción:** permite a los usuarios iniciar sesión en la aplicación.
+* **URL:** `<API_URL>/api/v1/auth/signin`
+* **Método:** GET
+* **Headers:**
+	* `Websockets-ApiKey`: API_KEY
+	* `Authorization`: Basic Auth + email + password
+* **Respuesta:**
+
+	```json
+	{
+  		"accessToken": "<accessToken>"
+	}
+	```
+* **Notas:** al realizar la llamada, se comprueba si el usuario ha cambiado o no la contraseña a una personal en su primer inicio de sesión (lo cual es obligatorio). Si no la ha cambiado, la llamada devuelve el campo "accessToken" como String vacío.
 
 <a name="autorxs"></a>
 ## ✍🏼 Autores/as
