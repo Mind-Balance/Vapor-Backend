@@ -74,23 +74,18 @@ final class User: Model {
 
 // DTOs
 extension User {
-    
-//    struct Create: Content, Validatable {
-//        let name: String
-//        let email: String
-//        let password: String
-//
-//        static func validations(_ validations: inout Vapor.Validations) {
-//            validations.add("name", as: String.self, is: !.empty, required: true)
-//            validations.add("email", as: String.self, is: .email, required: true)
-//            validations.add("password", as: String.self, is: .count(6...), required: true)
-//        }
-//    }
-    
     struct Public: Content {
         let id: UUID?
         let name: String
         let email: String
+    }
+    
+    struct NewPassword: Content, Validatable {
+        let newPassword: String
+
+        static func validations(_ validations: inout Vapor.Validations) {
+            validations.add("newPassword", as: String.self, is: .count(6...), required: true)
+        }
     }
 }
 
