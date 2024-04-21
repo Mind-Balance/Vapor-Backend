@@ -55,8 +55,31 @@ extension PassController {
     }
     
     func forgotten(req: Request) async throws -> Bool {
+        // Validate content entry
+        try User.PasswordForgotten.validate(content: req)
+        
+        // Decode email, dni and new password data
+        let passwordForgotten = try req.content.decode(User.PasswordForgotten.self)
         
         
-        return true
+        // Find user with dni on db
+        guard let user = try await User
+            .query(on: req.db)
+            .filter(\.$dni == passwordForgotten.dni)
+            .first() else {
+            throw Abort(.badRequest, reason: "User not authenticated: DNI not valid")
+        }
+        
+        if user.email == passwordForgotten.email {
+            // Hash password
+            let newPasswordHashed = try req.password.hash(passwordForgotten.newPassword)
+            // Change password to new on DB
+            user.password = newPasswordHashed
+            try await user.update(on: req.db)
+            
+            return true
+        } else {
+            throw Abort(.forbidden, reason: "User not authenticated: email not valid")
+        }
     }
 }

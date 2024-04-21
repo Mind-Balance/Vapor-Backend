@@ -63,7 +63,7 @@ extension AuthController {
         return JWTToken.Public(accessToken: accessSigned, refreshToken: refreshSigned)
     }
     
-    func identity(req: Request) async throws -> Bool {
+    func identity(req: Request) async throws -> JWTToken.Public {
         // Validate content entry
         try User.Identity.validate(content: req)
         
@@ -79,7 +79,12 @@ extension AuthController {
         }
         
         if user.email == identity.email {
-            return true
+            // Generate tokens
+            let tokens = JWTToken.generateToken(userID: user.id!)
+            let accessSigned = try req.jwt.sign(tokens.accessToken)
+            let refreshSigned = try req.jwt.sign(tokens.refreshToken)
+            
+            return JWTToken.Public(accessToken: accessSigned, refreshToken: refreshSigned)
         } else {
             throw Abort(.forbidden, reason: "User not authenticated: email not valid")
         }

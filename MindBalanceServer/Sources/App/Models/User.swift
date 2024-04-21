@@ -97,6 +97,18 @@ extension User {
             validations.add("dni", as: String.self, is: .count(9...9) && .alphanumeric, required: true)
         }
     }
+    
+    struct PasswordForgotten: Decodable, Validatable {
+        let email: String
+        let dni: String
+        let newPassword: String
+        
+        static func validations(_ validations: inout Vapor.Validations) {
+            validations.add("email", as: String.self, is: .email, required: true)
+            validations.add("dni", as: String.self, is: .count(9...9) && .alphanumeric, required: true)
+            validations.add("newPassword", as: String.self, is: .count(6...), required: true)
+        }
+    }
 }
 
 extension User: ModelAuthenticatable {
