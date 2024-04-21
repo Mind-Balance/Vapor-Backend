@@ -17,6 +17,7 @@ struct AuthController: RouteCollection {
             builder.group(JWTToken.authenticator(), JWTToken.guardMiddleware()) { builder in
                 builder.get("refresh", use: refresh)
             }
+            builder.post("identity", use: identity)
         }
     }
 }
@@ -26,12 +27,8 @@ extension AuthController {
         // Get authenticated user
         let user: User = try req.auth.require(User.self)
         
-        // TODO: Comprobar si el usuario tiene el campo de cambio de contraseña: bool
-        // if false:
-        //      se devuelven tokens vacíos. Al recibirlos vacíos en cliente, este le llevará a la pantalla
-        //      de cambio de contraseña. Se introducen las dos contraseñas y se hace llamada POST con email, pass antigua (guardados en Keychain) y la nueva contraseña
-        #warning("Ahora quedaría hacer llamada para cambiar contraseña")
-        
+        // Check password change field
+        // If false, returns empty tokens
         if user.passwordChanged {
             // Generate tokens
             let tokens = JWTToken.generateToken(userID: user.id!)
@@ -64,5 +61,27 @@ extension AuthController {
         let refreshSigned = try req.jwt.sign(tokens.refreshToken)
         
         return JWTToken.Public(accessToken: accessSigned, refreshToken: refreshSigned)
+    }
+    
+    func identity(req: Request) async throws -> Bool {
+        // Validate content entry
+        try User.Identity.validate(content: req)
+        
+        // Decode email and dni data
+        let identity = try req.content.decode(User.Identity.self)
+        
+        // Find user with dni on db
+        guard let user = try await User
+            .query(on: req.db)
+            .filter(\.$dni == identity.dni)
+            .first() else {
+            throw Abort(.badRequest, reason: "User not authenticated: DNI not valid")
+        }
+        
+        if user.email == identity.email {
+            return true
+        } else {
+            throw Abort(.forbidden, reason: "User not authenticated: email not valid")
+        }
     }
 }

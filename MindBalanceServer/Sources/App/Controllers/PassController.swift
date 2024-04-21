@@ -15,7 +15,7 @@ struct PassController: RouteCollection {
                 builder.post("change", use: change)
             }
             builder.group(JWTToken.authenticator(), JWTToken.guardMiddleware()) { builder in
-                builder.get("forgot", use: forgot)
+                builder.post("forgotten", use: forgotten)
             }
         }
     }
@@ -54,9 +54,9 @@ extension PassController {
         return JWTToken.Public(accessToken: accessSigned, refreshToken: refreshSigned)
     }
     
-    func forgot(req: Request) async throws -> String {
+    func forgotten(req: Request) async throws -> Bool {
         
         
-        return ""
+        return true
     }
 }
