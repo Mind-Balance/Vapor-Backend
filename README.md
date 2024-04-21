@@ -20,6 +20,8 @@
 		* [Sign In](#signIn)
 		* [Refresh Token](#refresh)
 		* [Change Password](#changePassword)
+		* [Confirm Identity](#identity)
+		* [Change Forgotten Password](#forgotten)
 * [✍🏼 Autores/as](#autorxs)
 * [©️ Licencia](#licencia)
 
@@ -133,6 +135,45 @@ La URL de la base de datos debe seguir el formato `postgresql://<usuario>@<host>
   		"accessToken": "<accessToken>",
   		"refreshToken": "<refreshToken>"
 	}
+	```
+	
+<a name="identity"></a>
+#### Confirm Identity
+
+* **Descripción:** permite al servidor identificar y autenticar al usuario mediante su email y DNI cuando este se ha olvidado de su contraseña.
+* **URL:** `<API_URL>/api/v1/auth/identity`
+* **Método:** POST
+* **Headers:**
+	* `MindBalance-ApiKey`: API_KEY
+* **Body:**
+	* `email`: correo electrónico del usuario
+	* `dni`: DNI del usuario
+* **Respuesta:**
+
+	```json
+	{
+  		"accessToken": "<accessToken>",
+  		"refreshToken": "<refreshToken>"
+	}
+	```
+	
+<a name="forgotten"></a>
+#### Change Forgotten Password
+
+* **Descripción:** permite a los usuarios cambiar de contraseña empleando en la llamada al servidor el email, DNI y nueva contraseña ya que se olvidó de la misma.
+* **URL:** `<API_URL>/api/v1/password/forgotten`
+* **Método:** POST
+* **Headers:**
+	* `MindBalance-ApiKey`: API_KEY
+	* `Authorization`: Bearer + Access Token
+* **Body:**
+	* `email`: correo electrónico del usuario
+	* `dni`: DNI del usuario
+	* `newPassword`: nueva contraseña del usuario
+* **Respuesta:**
+
+	```json
+	true
 	```
 
 <a name="autorxs"></a>
