@@ -83,7 +83,7 @@ La URL de la base de datos debe seguir el formato `postgresql://<usuario>@<host>
 * **URL:** `<API_URL>/api/v1/auth/signin`
 * **Método:** GET
 * **Headers:**
-	* `Websockets-ApiKey`: API_KEY
+	* `MindBalance-ApiKey`: API_KEY
 	* `Authorization`: Basic Auth + email + password
 * **Respuesta:**
 
