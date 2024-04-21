@@ -28,7 +28,6 @@ extension AuthController {
         let user: User = try req.auth.require(User.self)
         
         // Check password change field
-        // If false, returns empty tokens
         if user.passwordChanged {
             // Generate tokens
             let tokens = JWTToken.generateToken(userID: user.id!)
@@ -36,7 +35,7 @@ extension AuthController {
             let refreshSigned = try req.jwt.sign(tokens.refreshToken)
             
             return JWTToken.Public(accessToken: accessSigned, refreshToken: refreshSigned)
-        } else {
+        } else { // If false, returns empty tokens
             return JWTToken.Public(accessToken: "", refreshToken: "")
         }
     }

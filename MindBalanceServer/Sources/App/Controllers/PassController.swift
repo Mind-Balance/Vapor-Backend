@@ -61,7 +61,6 @@ extension PassController {
         // Decode email, dni and new password data
         let passwordForgotten = try req.content.decode(User.PasswordForgotten.self)
         
-        
         // Find user with dni on db
         guard let user = try await User
             .query(on: req.db)
