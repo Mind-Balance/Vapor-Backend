@@ -18,6 +18,8 @@
 	* [Instalación](#instalacion)
 	* [Endpoints](#endpoints)
 		* [Sign In](#signIn)
+		* [Refresh Token](#refresh)
+		* [Change Password](#changePassword)
 * [✍🏼 Autores/as](#autorxs)
 * [©️ Licencia](#licencia)
 
@@ -89,10 +91,49 @@ La URL de la base de datos debe seguir el formato `postgresql://<usuario>@<host>
 
 	```json
 	{
-  		"accessToken": "<accessToken>"
+  		"accessToken": "<accessToken>",
+  		"refreshToken": "<refreshToken>"
 	}
 	```
-* **Notas:** al realizar la llamada, se comprueba si el usuario ha cambiado o no la contraseña a una personal en su primer inicio de sesión (lo cual es obligatorio). Si no la ha cambiado, la llamada devuelve el campo "accessToken" como String vacío.
+* **Notas:** al realizar la llamada, se comprueba si el usuario ha cambiado o no la contraseña a una personal en su primer inicio de sesión (lo cual es obligatorio). Si no la ha cambiado, la llamada devuelve el campo `accessToken` y `refreshToken` como `String` vacíos.
+
+<a name="refresh"></a>
+#### Refresh Token
+
+* **Descripción:** permite refrescar el token de acceso.
+* **URL:** `<API_URL>/api/v1/auth/refresh`
+* **Método:** GET
+* **Headers:**
+	* `MindBalance-ApiKey`: API_KEY
+	* `Authorization`: Bearer + Refresh Token
+* **Respuesta:**
+
+	```json
+	{
+  		"accessToken": "<accessToken>",
+  		"refreshToken": "<refreshToken>"
+	}
+	```
+
+<a name="changePassword"></a>
+#### Change Password
+
+* **Descripción:** permite a los usuarios cambiar de contraseña empleando su email y su contraseña actual. *Endpoint* usado para el cambio de contraseña obligatorio al iniciar sesión por primera vez en la aplicación MindBalance.
+* **URL:** `<API_URL>/api/v1/password/change`
+* **Método:** POST
+* **Headers:**
+	* `MindBalance-ApiKey`: API_KEY
+	* `Authorization`: Basic Auth + email + password
+* **Body:**
+	* `newPassword`: nueva contraseña del usuario
+* **Respuesta:**
+
+	```json
+	{
+  		"accessToken": "<accessToken>",
+  		"refreshToken": "<refreshToken>"
+	}
+	```
 
 <a name="autorxs"></a>
 ## ✍🏼 Autores/as
